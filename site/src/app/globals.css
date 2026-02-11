@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: #f0ece4;
+  --color-card: #e5e0d6;
+  --color-text: #2c2a25;
+  --color-text-muted: #78706a;
+  --color-accent: #b87424;
+  --color-divider: #cdc8be;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono), ui-monospace, "SF Mono", monospace;
+  font-feature-settings: "ss01", "ss02", "cv01";
+}
+
+/* Warm accent selection highlight */
+::selection {
+  background-color: rgba(184, 116, 36, 0.18);
+  color: inherit;
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus-visible styles (web guidelines compliant) */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Balanced headings to prevent widows */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Themed scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-divider);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Smooth scroll offset for fixed top bar */
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

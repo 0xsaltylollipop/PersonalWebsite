@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Design Playground</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #111;
+    color: #e0e0e0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Controls Panel */
+  .controls {
+    width: 320px;
+    min-width: 320px;
+    background: #161616;
+    border-right: 1px solid #2a2a2a;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .controls h2 {
+    font-size: 13px; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #666;
+    margin: 24px 0 12px 0;
+  }
+  .controls h2:first-child { margin-top: 0; }
+
+  .control-group { margin-bottom: 12px; }
+  .control-group label {
+    display: flex; justify-content: space-between;
+    font-size: 13px; color: #999; margin-bottom: 4px;
+  }
+  .control-group label span.val {
+    color: #666; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+  }
+
+  input[type="range"] { width: 100%; accent-color: #555; cursor: pointer; }
+
+  input[type="color"] {
+    width: 40px; height: 28px; border: 1px solid #333;
+    border-radius: 4px; cursor: pointer; background: transparent;
+  }
+
+  select {
+    width: 100%; padding: 6px 8px; background: #222; color: #ccc;
+    border: 1px solid #333; border-radius: 4px; font-size: 13px; cursor: pointer;
+  }
+
+  .color-row { display: flex; align-items: center; gap: 10px; }
+  .color-row label { flex: 1; margin-bottom: 0; }
+
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .presets button {
+    padding: 5px 12px; background: #222; color: #aaa;
+    border: 1px solid #333; border-radius: 6px;
+    font-size: 12px; cursor: pointer; transition: background 0.15s;
+  }
+  .presets button:hover { background: #2a2a2a; }
+  .presets button.active { background: #333; border-color: #555; color: #fff; }
+
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .toggle-row span { font-size: 13px; color: #999; }
+  .toggle-row input[type="checkbox"] { accent-color: #666; width: 16px; height: 16px; cursor: pointer; }
+
+  /* Right side */
+  .right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .preview-wrap { flex: 1; overflow-y: auto; padding: 0; }
+  .preview-container { min-height: 100%; }
+
+  /* Prompt */
+  .prompt-bar {
+    background: #161616; border-top: 1px solid #2a2a2a;
+    padding: 16px 20px; max-height: 180px; overflow-y: auto;
+  }
+  .prompt-bar .prompt-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+  }
+  .prompt-bar .prompt-header span {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #555;
+  }
+  .prompt-bar button {
+    padding: 4px 14px; background: #2a2a2a; color: #aaa;
+    border: 1px solid #444; border-radius: 4px;
+    font-size: 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .prompt-bar button:hover { background: #333; }
+  .prompt-text {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px; line-height: 1.6; color: #888;
+    white-space: pre-wrap;
+  }
+
+  /* ============== PREVIEW SITE STYLES ============== */
+
+  .site-nav {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 24px 40px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .site-nav .name { font-weight: 700; letter-spacing: -0.3px; }
+  .site-nav .links { display: flex; gap: 24px; list-style: none; }
+  .site-nav .links a {
+    text-decoration: none; font-size: 14px;
+    opacity: 0.4; transition: opacity 0.2s;
+  }
+  .site-nav .links a:hover { opacity: 0.9; }
+
+  .site-content {
+    max-width: 900px; margin: 0 auto; padding: 40px 40px 0;
+  }
+
+  .section-title {
+    margin-bottom: 20px; letter-spacing: -0.3px;
+  }
+
+  .section-divider {
+    border: none; height: 1px; margin-bottom: 16px;
+  }
+
+  .section { margin-bottom: 64px; }
+
+  /* Hero */
+  .hero-section { margin-bottom: 64px; }
+  .hero-section .hero-name {
+    font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px;
+  }
+  .hero-section .hero-role { opacity: 0.4; }
+
+  .hero-divider { border: none; height: 1px; margin: 24px 0; }
+
+  .hero-section .hero-bio { opacity: 0.6; line-height: 1.7; max-width: 680px; }
+
+  /* Cards */
+  .card { transition: all 0.2s; }
+  .card:hover { transform: translateY(-1px); }
+
+  .card-title {
+    font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .card-title .org { font-weight: 400; opacity: 0.35; font-size: 0.85em; }
+
+  .tag {
+    display: inline-block; padding: 2px 10px;
+    border-radius: 4px; font-size: 0.72em; opacity: 0.5;
+  }
+
+  .card .desc { opacity: 0.55; line-height: 1.6; margin-top: 10px; }
+  .card .tags-row { margin-top: 10px; opacity: 0.3; font-size: 0.85em; }
+  .card .year { opacity: 0.3; font-size: 0.85em; margin-bottom: 6px; }
+
+  /* Papers */
+  .paper-row {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 14px 0;
+  }
+  .paper-row:last-child .paper-bottom-border { display: none; }
+  .paper-title { font-weight: 600; }
+  .paper-meta { opacity: 0.3; font-size: 0.85em; margin-top: 2px; }
+  .paper-row a { text-decoration: none; font-weight: 500; font-size: 0.85em; opacity: 0.4; }
+  .paper-row a:hover { opacity: 0.9; }
+
+  /* Recommendation */
+  .rec-quote { opacity: 0.6; line-height: 1.8; margin-bottom: 12px; font-style: italic; }
+  .rec-author { opacity: 0.35; font-size: 0.9em; }
+
+  /* Welcome Box (Claude Code style) */
+  .welcome-box {
+    display: flex; gap: 0;
+    margin-bottom: 32px;
+  }
+
+  .welcome-left {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px 28px;
+    min-width: 180px;
+  }
+
+  .pixel-icon {
+    font-size: 13px; line-height: 1.15;
+    white-space: pre; text-align: center;
+    margin-bottom: 12px; opacity: 0.7;
+  }
+
+  .welcome-meta {
+    text-align: center; font-size: 0.8em;
+    opacity: 0.4; line-height: 1.5;
+  }
+
+  .welcome-right {
+    flex: 1; padding: 24px 28px;
+  }
+
+  .welcome-name {
+    font-size: 28px; font-weight: 700;
+    letter-spacing: -0.5px; margin-bottom: 12px;
+  }
+
+  .welcome-bio {
+    opacity: 0.6; line-height: 1.7; margin-bottom: 16px;
+  }
+
+  .welcome-links {
+    display: flex; gap: 20px; font-size: 0.85em;
+  }
+
+  .welcome-links a { text-decoration: none; opacity: 0.7; }
+  .welcome-links a:hover { opacity: 1; }
+
+  /* Status Bar (Claude Code style) */
+  .status-bar {
+    position: sticky; bottom: 0;
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 8px 40px;
+    font-size: 0.78em; opacity: 0.5;
+    max-width: 900px; margin: 0 auto;
+  }
+
+  .status-right {
+    text-align: right;
+  }
+
+  .status-sep { margin: 0 4px; }
+
+  .status-avail { font-weight: 600; }
+
+  .status-hint { opacity: 0.6; }
+
+  .paper-row-border { border-bottom: 1px solid; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <h2>Presets</h2>
+  <div class="presets">
+    <button onclick="applyPreset('claudeLight')" id="preset-claudeLight">Claude Light</button>
+    <button onclick="applyPreset('claudeDark')" id="preset-claudeDark">Claude Dark</button>
+    <button onclick="applyPreset('warmPaper')" id="preset-warmPaper">Warm Paper</button>
+    <button onclick="applyPreset('cleanWhite')" id="preset-cleanWhite">Clean White</button>
+  </div>
+
+  <h2>Background</h2>
+  <div class="control-group">
+    <div class="color-row">
+      <label>Page background <span class="val" id="bg-val">#f0ece4</span></label>
+      <input type="color" id="bg-color" value="#f0ece4" oninput="state.bgColor=this.value;updateAll()">
+    </div>
+  </div>
+
+  <h2>Cards</h2>
+  <div class="control-group">
+    <div class="color-row">
+      <label>Card color <span class="val" id="card-color-val">#e8e4dc</span></label>
+      <input type="color" id="card-color" value="#e8e4dc" oninput="state.cardColor=this.value;updateAll()">
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Border radius <span class="val" id="radius-val">6px</span></label>
+    <input type="range" id="radius" min="0" max="20" value="6" oninput="state.radius=+this.value;updateAll()">
+  </div>
+  <div class="control-group">
+    <label>Padding <span class="val" id="padding-val">24px</span></label>
+    <input type="range" id="padding" min="12" max="48" value="24" oninput="state.padding=+this.value;updateAll()">
+  </div>
+  <div class="control-group">
+    <label>Border opacity <span class="val" id="border-op-val">0.08</span></label>
+    <input type="range" id="border-op" min="0" max="40" value="8" oninput="state.borderOpacity=this.value/100;updateAll()">
+  </div>
+
+  <h2>Typography</h2>
+  <div class="control-group">
+    <label>Font family</label>
+    <select id="mono-font" onchange="state.monoFont=this.value;updateAll()">
+      <option value="'IBM Plex Mono', 'SF Mono', monospace">IBM Plex Mono</option>
+      <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+      <option value="'Fira Code', monospace">Fira Code</option>
+      <option value="'SF Mono', 'Menlo', monospace">SF Mono / Menlo</option>
+      <option value="'Courier New', monospace">Courier New</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>Heading size <span class="val" id="heading-size-val">26px</span></label>
+    <input type="range" id="heading-size" min="18" max="44" value="26" oninput="state.headingSize=+this.value;updateAll()">
+  </div>
+  <div class="control-group">
+    <label>Body size <span class="val" id="body-size-val">15px</span></label>
+    <input type="range" id="body-size" min="12" max="20" value="15" oninput="state.bodySize=+this.value;updateAll()">
+  </div>
+  <div class="control-group">
+    <label>Hero name size <span class="val" id="hero-size-val">34px</span></label>
+    <input type="range" id="hero-size" min="24" max="56" value="34" oninput="state.heroSize=+this.value;updateAll()">
+  </div>
+
+  <h2>Colors</h2>
+  <div class="control-group">
+    <div class="color-row">
+      <label>Text color <span class="val" id="text-color-val">#2c2a25</span></label>
+      <input type="color" id="text-color" value="#2c2a25" oninput="state.textColor=this.value;updateAll()">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="color-row">
+      <label>Accent color <span class="val" id="accent-val">#b07020</span></label>
+      <input type="color" id="accent-color" value="#b07020" oninput="state.accentColor=this.value;updateAll()">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="color-row">
+      <label>Divider color <span class="val" id="divider-val">#cdc8be</span></label>
+      <input type="color" id="divider-color" value="#cdc8be" oninput="state.dividerColor=this.value;updateAll()">
+    </div>
+  </div>
+
+  <h2>Spacing</h2>
+  <div class="control-group">
+    <label>Section gap <span class="val" id="section-gap-val">64px</span></label>
+    <input type="range" id="section-gap" min="32" max="120" value="64" oninput="state.sectionGap=+this.value;updateAll()">
+  </div>
+
+  <h2>Layout</h2>
+  <div class="control-group">
+    <label>Content width <span class="val" id="content-width-val">900px</span></label>
+    <input type="range" id="content-width" min="600" max="1200" value="900" step="50" oninput="state.contentWidth=+this.value;updateAll()">
+  </div>
+  <div class="toggle-row">
+    <span>Section dividers</span>
+    <input type="checkbox" id="dividers" checked onchange="state.showDividers=this.checked;updateAll()">
+  </div>
+  <div class="toggle-row">
+    <span>Show tags</span>
+    <input type="checkbox" id="show-tags" checked onchange="state.showTags=this.checked;updateAll()">
+  </div>
+  <div class="toggle-row">
+    <span>Show card backgrounds</span>
+    <input type="checkbox" id="show-cards" checked onchange="state.showCards=this.checked;updateAll()">
+  </div>
+</div>
+
+<div class="right">
+  <div class="preview-wrap">
+    <div class="preview-container" id="preview">
+
+      <div class="site-content" id="content">
+
+        <!-- Welcome Box (Claude Code style) -->
+        <div class="welcome-box" id="welcome-box">
+          <div class="welcome-left">
+            <div class="pixel-icon" id="pixel-icon">
+ ┌─────┐<br>
+ │ J·J │<br>
+ │ ─── │<br>
+ │ ··· │<br>
+ └─────┘</div>
+            <div class="welcome-meta">
+              AI Engineer &middot; Open to work<br>
+              London, United Kingdom
+            </div>
+          </div>
+          <div class="welcome-right">
+            <div class="welcome-name" id="welcome-name">Jan Jancen</div>
+            <div class="welcome-bio">Building novel solutions to existing and emerging problems. Currently shipping production AI systems at the intersection of large language models, agent architectures, and developer tooling.</div>
+            <div class="welcome-links">
+              <a href="#" class="accent-link">github</a>
+              <a href="#" class="accent-link">linkedin</a>
+              <a href="#" class="accent-link">email</a>
+              <a href="#" class="accent-link">cv.pdf</a>
+            </div>
+          </div>
+        </div>
+
+        <hr class="hero-divider" id="hero-divider">
+
+        <!-- Experience -->
+        <div class="section" id="section-experience">
+          <h2 class="section-title">Experience</h2>
+          <div class="card" id="exp-1" style="margin-bottom:12px">
+            <div class="year">2024 &mdash; Present</div>
+            <div class="card-title">
+              AI Engineer Intern
+              <span class="org">AI Startup</span>
+            </div>
+            <div class="desc">Shipping production TypeScript for AI agent systems. Building LLM-powered workflows, tool-use pipelines, and evaluation frameworks.</div>
+          </div>
+          <div class="card" id="exp-2">
+            <div class="year">2023 &mdash; 2024</div>
+            <div class="card-title">
+              Research Assistant
+              <span class="org">University Lab</span>
+            </div>
+            <div class="desc">Multi-agent coordination research. Designed and evaluated LLM-based architectures for web automation tasks.</div>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="section" id="section-education">
+          <hr class="section-divider divider-line" id="div-edu">
+          <h2 class="section-title">Education</h2>
+          <div class="card" id="edu-1" style="margin-bottom:12px">
+            <div class="year">2022 &mdash; 2024</div>
+            <div class="card-title">
+              MSc Computer Science
+              <span class="org">University Name</span>
+            </div>
+            <div class="desc">Focus on AI/ML systems, multi-agent architectures, and distributed computing.</div>
+          </div>
+          <div class="card" id="edu-2">
+            <div class="year">2018 &mdash; 2022</div>
+            <div class="card-title">
+              BSc Computer Science
+              <span class="org">University Name</span>
+            </div>
+            <div class="desc">Foundations in algorithms, systems design, and software engineering.</div>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="section" id="section-projects">
+          <hr class="section-divider divider-line" id="div-proj">
+          <h2 class="section-title">Projects</h2>
+          <div class="card" id="proj-1" style="margin-bottom:12px">
+            <div class="card-title">
+              web-agent-research/
+              <span class="org">UCL Nexus Lab</span>
+              <span class="tag" id="tag-1">active-research</span>
+            </div>
+            <div class="desc">Building a frugal, generalized web agent framework that enables multi-step action output in the form of Python Playwright scripts.</div>
+            <div class="tags-row" id="tags-1">#ai-agents #playwright #web-automation #deep-learning</div>
+          </div>
+          <div class="card" id="proj-2" style="margin-bottom:12px">
+            <div class="card-title">
+              rag-pipeline/
+              <span class="org">Personal</span>
+              <span class="tag" id="tag-2">completed</span>
+            </div>
+            <div class="desc">Production retrieval-augmented generation with hybrid search, reranking, and evaluation harness.</div>
+            <div class="tags-row" id="tags-2">#python #pinecone #langchain #retrieval</div>
+          </div>
+          <div class="card" id="proj-3">
+            <div class="card-title">
+              eval-dashboard/
+              <span class="org">Startup</span>
+              <span class="tag" id="tag-3">in-progress</span>
+            </div>
+            <div class="desc">Real-time evaluation framework for tracking LLM output quality across prompt variants and model versions.</div>
+            <div class="tags-row" id="tags-3">#nextjs #d3 #typescript #evals</div>
+          </div>
+        </div>
+
+        <!-- Papers -->
+        <div class="section" id="section-papers">
+          <hr class="section-divider divider-line" id="div-papers">
+          <h2 class="section-title">Papers</h2>
+          <div class="card" id="papers-card">
+            <div class="paper-row paper-row-border">
+              <div>
+                <div class="paper-title">Efficient Multi-Agent Coordination in LLM Systems</div>
+                <div class="paper-meta">Conference on AI Systems &middot; 2024</div>
+              </div>
+              <a href="#" class="accent-link">PDF &rarr;</a>
+            </div>
+            <div class="paper-row">
+              <div>
+                <div class="paper-title">Retrieval Strategies for Domain-Specific Knowledge Bases</div>
+                <div class="paper-meta">NeurIPS Workshop &middot; 2023</div>
+              </div>
+              <a href="#" class="accent-link">PDF &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="section" id="section-rec">
+          <hr class="section-divider divider-line" id="div-rec">
+          <h2 class="section-title">Recommendation</h2>
+          <div class="card" id="rec-card">
+            <div class="rec-quote">"Jan demonstrated exceptional ability to bridge theoretical understanding with practical implementation. Their work on multi-agent systems showed both technical depth and creative problem-solving that I rarely see at this level."</div>
+            <div class="rec-author">&mdash; Prof. Name, University Department</div>
+          </div>
+        </div>
+
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Status Bar (Claude Code style) -->
+      <div class="status-bar" id="status-bar">
+        <div class="status-left">
+          <span class="status-hint">&#8593;&#8595; scroll to explore</span>
+        </div>
+        <div class="status-right">
+          <span>3 projects &middot; 2 papers &middot; 1 letter</span>
+          <span class="status-sep">&middot;</span>
+          <span class="status-avail" id="status-avail">open to work</span>
+          <span class="status-sep">&middot;</span>
+          <span>last updated: Feb 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prompt-bar">
+    <div class="prompt-header">
+      <span>Generated Prompt</span>
+      <button onclick="copyPrompt()">Copy Prompt</button>
+    </div>
+    <div class="prompt-text" id="prompt-output"></div>
+  </div>
+</div>
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+const DEFAULTS = {
+  bgColor: '#f0ece4',
+  cardColor: '#e8e4dc',
+  radius: 6,
+  padding: 24,
+  borderOpacity: 0.10,
+  monoFont: "'IBM Plex Mono', 'SF Mono', monospace",
+  headingSize: 26,
+  bodySize: 15,
+  heroSize: 34,
+  textColor: '#2c2a25',
+  accentColor: '#b07020',
+  dividerColor: '#cdc8be',
+  sectionGap: 64,
+  contentWidth: 900,
+  showDividers: true,
+  showTags: true,
+  showCards: true
+};
+
+const state = { ...DEFAULTS };
+
+const presets = {
+  claudeLight: { ...DEFAULTS },
+  claudeDark: {
+    bgColor: '#1a1a1a', cardColor: '#242424', radius: 6, padding: 24,
+    borderOpacity: 0.08, monoFont: "'IBM Plex Mono', 'SF Mono', monospace",
+    headingSize: 26, bodySize: 15, heroSize: 34,
+    textColor: '#d4d0c8', accentColor: '#e09a5c', dividerColor: '#333333',
+    sectionGap: 64, contentWidth: 900, showDividers: true, showTags: true, showCards: true
+  },
+  warmPaper: {
+    bgColor: '#f5f0e8', cardColor: '#ede8df', radius: 4, padding: 24,
+    borderOpacity: 0.08, monoFont: "'JetBrains Mono', monospace",
+    headingSize: 26, bodySize: 15, heroSize: 34,
+    textColor: '#3a3530', accentColor: '#996b2d', dividerColor: '#d5d0c6',
+    sectionGap: 64, contentWidth: 900, showDividers: true, showTags: true, showCards: true
+  },
+  cleanWhite: {
+    bgColor: '#f8f8f6', cardColor: '#f0f0ee', radius: 6, padding: 24,
+    borderOpacity: 0.08, monoFont: "'IBM Plex Mono', 'SF Mono', monospace",
+    headingSize: 26, bodySize: 15, heroSize: 34,
+    textColor: '#1a1a1a', accentColor: '#555555', dividerColor: '#e0e0de',
+    sectionGap: 64, contentWidth: 900, showDividers: true, showTags: true, showCards: true
+  }
+};
+
+function applyPreset(name) {
+  Object.assign(state, presets[name]);
+  syncControls();
+  updateAll();
+  document.querySelectorAll('.presets button').forEach(b => b.classList.remove('active'));
+  document.getElementById('preset-' + name)?.classList.add('active');
+}
+
+function syncControls() {
+  document.getElementById('bg-color').value = state.bgColor;
+  document.getElementById('card-color').value = state.cardColor;
+  document.getElementById('radius').value = state.radius;
+  document.getElementById('padding').value = state.padding;
+  document.getElementById('border-op').value = Math.round(state.borderOpacity * 100);
+  document.getElementById('mono-font').value = state.monoFont;
+  document.getElementById('heading-size').value = state.headingSize;
+  document.getElementById('body-size').value = state.bodySize;
+  document.getElementById('hero-size').value = state.heroSize;
+  document.getElementById('text-color').value = state.textColor;
+  document.getElementById('accent-color').value = state.accentColor;
+  document.getElementById('divider-color').value = state.dividerColor;
+  document.getElementById('section-gap').value = state.sectionGap;
+  document.getElementById('content-width').value = state.contentWidth;
+  document.getElementById('dividers').checked = state.showDividers;
+  document.getElementById('show-tags').checked = state.showTags;
+  document.getElementById('show-cards').checked = state.showCards;
+}
+
+function renderPreview() {
+  const preview = document.getElementById('preview');
+  const nav = document.getElementById('nav');
+  const content = document.getElementById('content');
+
+  // Page
+  preview.style.background = state.bgColor;
+  preview.style.fontFamily = state.monoFont;
+  preview.style.fontSize = state.bodySize + 'px';
+  preview.style.color = state.textColor;
+
+  // Content
+  content.style.maxWidth = state.contentWidth + 'px';
+
+  // Hero divider
+  const heroDivider = document.getElementById('hero-divider');
+  heroDivider.style.background = state.dividerColor;
+  heroDivider.style.display = state.showDividers ? 'block' : 'none';
+
+  // Section titles
+  document.querySelectorAll('.section-title').forEach(t => {
+    t.style.fontFamily = state.monoFont;
+    t.style.fontSize = state.headingSize + 'px';
+    t.style.fontWeight = '700';
+    t.style.color = state.textColor;
+  });
+
+  // Dividers
+  document.querySelectorAll('.divider-line').forEach(d => {
+    d.style.background = state.dividerColor;
+    d.style.display = state.showDividers ? 'block' : 'none';
+  });
+
+  // Cards
+  const allCards = ['exp-1','exp-2','edu-1','edu-2','proj-1','proj-2','proj-3','papers-card','rec-card'];
+  allCards.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (state.showCards) {
+      el.style.background = state.cardColor;
+      el.style.borderRadius = state.radius + 'px';
+      el.style.padding = state.padding + 'px';
+      const bdrColor = isColorDark(state.bgColor) ? `rgba(255,255,255,${state.borderOpacity})` : `rgba(0,0,0,${state.borderOpacity})`;
+      el.style.border = `1px solid ${bdrColor}`;
+    } else {
+      el.style.background = 'transparent';
+      el.style.borderRadius = '0';
+      el.style.padding = state.padding + 'px ' + '0';
+      el.style.border = 'none';
+      el.style.borderBottom = `1px solid ${state.dividerColor}`;
+    }
+  });
+
+  // Tags
+  const isDark = isColorDark(state.bgColor);
+  ['tag-1','tag-2','tag-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.display = state.showTags ? 'inline-block' : 'none';
+      el.style.border = `1px solid ${isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}`;
+      el.style.color = state.textColor;
+    }
+  });
+  ['tags-1','tags-2','tags-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = state.showTags ? 'block' : 'none';
+  });
+
+  // Accent links
+  document.querySelectorAll('.accent-link').forEach(a => {
+    a.style.color = state.accentColor;
+  });
+
+  // Footer
+  document.getElementById('footer-section').style.color = state.textColor;
+  document.querySelectorAll('.footer a').forEach(a => a.style.color = state.textColor);
+
+  // Welcome box
+  const wb = document.getElementById('welcome-box');
+  if (wb) {
+    const isDk = isColorDark(state.bgColor);
+    wb.style.border = `1px solid ${isDk ? 'rgba(255,255,255,' + state.borderOpacity + ')' : 'rgba(0,0,0,' + state.borderOpacity + ')'}`;
+    wb.style.borderRadius = state.radius + 'px';
+    wb.style.background = state.showCards ? state.cardColor : 'transparent';
+    const wl = wb.querySelector('.welcome-left');
+    if (wl) {
+      wl.style.borderRight = `1px solid ${isDk ? 'rgba(255,255,255,' + state.borderOpacity + ')' : 'rgba(0,0,0,' + state.borderOpacity + ')'}`;
+    }
+  }
+  const wn = document.getElementById('welcome-name');
+  if (wn) { wn.style.fontFamily = state.monoFont; wn.style.color = state.textColor; }
+
+  // Status bar
+  const sb = document.getElementById('status-bar');
+  if (sb) {
+    sb.style.fontFamily = state.monoFont;
+    sb.style.color = state.textColor;
+    sb.style.borderTop = `1px solid ${state.dividerColor}`;
+    sb.style.background = state.bgColor;
+    sb.style.maxWidth = state.contentWidth + 'px';
+  }
+  const sa = document.getElementById('status-avail');
+  if (sa) sa.style.color = state.accentColor;
+
+  // Paper row internal borders
+  document.querySelectorAll('.paper-row-border').forEach(r => {
+    r.style.borderColor = state.dividerColor;
+  });
+
+  // Sections gap
+  document.querySelectorAll('.section').forEach(s => {
+    s.style.marginBottom = state.sectionGap + 'px';
+  });
+  document.getElementById('hero-section').style.marginBottom = state.sectionGap + 'px';
+
+  // Value labels
+  document.getElementById('bg-val').textContent = state.bgColor;
+  document.getElementById('card-color-val').textContent = state.cardColor;
+  document.getElementById('radius-val').textContent = state.radius + 'px';
+  document.getElementById('padding-val').textContent = state.padding + 'px';
+  document.getElementById('border-op-val').textContent = state.borderOpacity.toFixed(2);
+  document.getElementById('heading-size-val').textContent = state.headingSize + 'px';
+  document.getElementById('body-size-val').textContent = state.bodySize + 'px';
+  document.getElementById('hero-size-val').textContent = state.heroSize + 'px';
+  document.getElementById('text-color-val').textContent = state.textColor;
+  document.getElementById('accent-val').textContent = state.accentColor;
+  document.getElementById('divider-val').textContent = state.dividerColor;
+  document.getElementById('section-gap-val').textContent = state.sectionGap + 'px';
+  document.getElementById('content-width-val').textContent = state.contentWidth + 'px';
+}
+
+function isColorDark(hex) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return (r * 0.299 + g * 0.587 + b * 0.114) < 128;
+}
+
+function updatePrompt() {
+  const isDark = isColorDark(state.bgColor);
+  const fontName = state.monoFont.split(',')[0].replace(/'/g, '');
+  const lines = [];
+
+  lines.push(`Build a personal portfolio site with a ${isDark ? 'dark' : 'light'} terminal aesthetic (monospace typography, no terminal symbols like $ or >).`);
+  lines.push('');
+  lines.push('Design tokens:');
+  lines.push(`- Page background: ${state.bgColor}`);
+  if (state.showCards) {
+    const borderDesc = isDark ? 'white' : 'black';
+    lines.push(`- Card background: ${state.cardColor}, ${state.radius}px radius, 1px border at ${(state.borderOpacity*100).toFixed(0)}% ${borderDesc} opacity`);
+  } else {
+    lines.push(`- No card backgrounds — sections separated by bottom borders (${state.dividerColor})`);
+  }
+  lines.push(`- Font: ${fontName} (monospace everywhere — headings, body, nav, all)`);
+  lines.push(`- Text: ${state.textColor}, headings ${state.headingSize}px, body ${state.bodySize}px, hero name ${state.heroSize}px`);
+  lines.push(`- Accent: ${state.accentColor} (used for links like PDF arrows)`);
+  lines.push(`- Dividers: ${state.showDividers ? state.dividerColor + ' solid 1px lines between sections' : 'none'}`);
+  lines.push(`- Content max-width: ${state.contentWidth}px, section gap: ${state.sectionGap}px`);
+  lines.push(`- Tags: ${state.showTags ? 'bordered pill tags + hashtag rows on project cards' : 'hidden'}`);
+  lines.push('');
+  lines.push('Layout (inspired by Claude Code CLI):');
+  lines.push('- Welcome box at top: bordered box split into left + right halves');
+  lines.push('  - Left half: small ASCII pixel-art icon with initials, meta info below (role + location)');
+  lines.push('  - Right half: large name, bio paragraph, row of links (github, linkedin, email, cv.pdf)');
+  lines.push('  - Vertical divider line between left and right halves');
+  lines.push('- Divider line after welcome box');
+  lines.push('- Experience: stacked cards (year range, role title, org, description)');
+  lines.push('- Education: stacked cards (year range, degree title, org, description)');
+  lines.push('- Projects: stacked cards (name as path/, org, status tag, description, hashtags)');
+  lines.push('- Papers: list rows inside a card (title, venue, PDF link)');
+  lines.push('- Recommendation: italic quote card with author');
+  lines.push('- Fixed status bar at bottom: left side "scroll to explore", right side "3 projects · 2 papers · open to work · last updated"');
+  lines.push('');
+  lines.push('Tech: Next.js + Tailwind CSS. Deploy on Vercel.');
+
+  document.getElementById('prompt-output').textContent = lines.join('\n');
+}
+
+function copyPrompt() {
+  const text = document.getElementById('prompt-output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.prompt-bar button');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Prompt', 1500);
+  });
+}
+
+function updateAll() {
+  renderPreview();
+  updatePrompt();
+}
+
+applyPreset('claudeLight');
+</script>
+
+</body>
+</html>
