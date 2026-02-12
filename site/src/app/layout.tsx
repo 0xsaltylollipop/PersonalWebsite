@@ -10,14 +10,14 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jan Jancen — AI Engineer",
+  title: "Jan Sirui Chen — Software Engineer",
   description:
-    "AI Engineer building production systems at the intersection of large language models, agent architectures, and developer tooling.",
+    "Software Engineer shipping production AI systems at YC and venture-backed startups. Building with LLMs, autonomous agents, and developer tooling.",
   metadataBase: new URL("https://janjancen.com"),
   openGraph: {
-    title: "Jan Jancen — AI Engineer",
+    title: "Jan Sirui Chen — Software Engineer",
     description:
-      "AI Engineer building production systems at the intersection of LLMs, agent architectures, and developer tooling.",
+      "Software Engineer shipping production AI systems at YC and venture-backed startups. Building with LLMs, autonomous agents, and developer tooling.",
     type: "website",
   },
 };

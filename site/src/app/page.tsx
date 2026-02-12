@@ -128,7 +128,7 @@ const navItems = [
   { href: "#experience", label: "experience" },
   { href: "#education", label: "education" },
   { href: "#projects", label: "projects" },
-  { href: "#papers", label: "papers" },
+  { href: "#research", label: "research" },
   { href: "#recommendation", label: "recommendation" },
 ] as const;
 
@@ -177,19 +177,19 @@ export default function Home() {
               <NarutoAscii />
               <div className="min-w-0 flex-1 pt-0.5">
                 <h1 className="text-[1.35em] font-bold tracking-tight">
-                  Jan Jancen
+                  Jan Sirui Chen
                 </h1>
                 <p className="mt-1 text-[0.85em] text-text-muted">
-                  AI Engineer &middot; Open to Work
+                  Software Engineer &middot; Open to Work
                 </p>
                 <p className="mt-0.5 text-[0.82em] text-text-muted/80">
-                  London, United Kingdom
+                  Munich, Germany
                 </p>
                 <p className="mt-4 max-w-[540px] text-[0.92em] leading-[1.7] opacity-80">
-                  Building novel solutions to existing and emerging problems.
-                  Currently shipping production AI systems at the intersection
-                  of large language models, agent architectures, and developer
-                  tooling.
+                  Shipping production AI systems at YC and venture-backed
+                  startups. Building full-stack features with LLMs, autonomous
+                  agents, and developer tooling. Youngest TA for LLM security
+                  at TUM.
                 </p>
               </div>
             </div>
@@ -212,7 +212,7 @@ export default function Home() {
                 linkedin
               </a>
               <a
-                href="mailto:email@janjancen.com"
+                href="mailto:jan.jc.chen@gmail.com"
                 className="cursor-pointer text-accent opacity-85 transition-opacity duration-200 hover:opacity-100"
               >
                 email
@@ -236,16 +236,34 @@ export default function Home() {
           </SectionTitle>
           <div className="flex flex-col gap-1">
             <Card
-              year="2024 — Present"
-              title="AI Engineer Intern"
-              org="AI Startup"
-              description="Shipping production TypeScript for AI agent systems. Building LLM-powered workflows, tool-use pipelines, and evaluation frameworks."
+              year="Jan 2026 — Present"
+              title="Software Engineering Intern"
+              org="Comena (YC S25)"
+              description="Building full-stack PDF source highlighting with Gemini AI vision for bounding box extraction. Integrated Gemini 3 Flash with coordinate conversion and React-based highlight overlay with scroll-to-view UX."
             />
             <Card
-              year="2023 — 2024"
-              title="Research Assistant"
-              org="University Lab"
-              description="Multi-agent coordination research. Designed and evaluated LLM-based architectures for web automation tasks."
+              year="Oct 2025 — Jan 2026"
+              title="Software Engineering Intern"
+              org="NOA Intelligence"
+              description="Architected event-driven queue systems with PostgreSQL, built autonomous AI agents with LangGraph, and developed LLM evaluation frameworks. Reduced data pipeline complexity by 58% and API calls by 80%."
+            />
+            <Card
+              year="Mar 2025 — Jul 2025"
+              title="Teaching Assistant"
+              org="TUM — Chair of Software Engineering & AI"
+              description="Designed and taught a 2-hour lecture series on LLM Fundamentals for 40 students including Master candidates. Youngest TA (3rd semester BSc) in the chair's history, selected among PhD-level peers."
+            />
+            <Card
+              year="Feb 2023 — Aug 2023"
+              title="Product Intern & First Employee"
+              org="Moonblock"
+              description="Built and maintained the core database for a proprietary market intelligence tool tracking NFT projects for Fortune 500 clients. Deployed automated data pipelines with Python web scraping and pandas."
+            />
+            <Card
+              year="Apr 2022 — Oct 2022"
+              title="Founding Team & Head of Analysis"
+              org="Unfiltered"
+              description="Shaped product strategy for a B2B SaaS platform that grew to $240K MRR. Led the core analytical function for 300K+ members, evaluating financial and sentiment data."
             />
           </div>
         </section>
@@ -259,16 +277,22 @@ export default function Home() {
           </SectionTitle>
           <div className="flex flex-col gap-1">
             <Card
-              year="2022 — 2024"
-              title="MSc Computer Science"
-              org="University Name"
-              description="Focus on AI/ML systems, multi-agent architectures, and distributed computing."
+              year="Oct 2023 — Present"
+              title="BSc Computer Science"
+              org="Technical University of Munich"
+              description="Currently on a gap semester to build AI agents full-time."
             />
             <Card
-              year="2018 — 2022"
-              title="BSc Computer Science"
-              org="University Name"
-              description="Foundations in algorithms, systems design, and software engineering."
+              year="Sep 2021 — Jun 2023"
+              title="TUMKolleg Program"
+              org="TUM & Werner-Heisenberg-Gymnasium"
+              description="Selective collaborative program between TUM and WHG Garching for exceptionally talented students in the final 2 years of Gymnasium."
+            />
+            <Card
+              year="Early Studies"
+              title="Early Enrollment Program"
+              org="Technische Universität München"
+              description="TUM early enrollment program for excellent high school students in Computer Science. Handpicked students participate in university-level Computer Science courses alongside regular degree students."
             />
           </div>
         </section>
@@ -283,49 +307,59 @@ export default function Home() {
           <div className="flex flex-col gap-1">
             <Card
               year=""
-              title="web-agent-research/"
-              org="UCL Nexus Lab"
-              tag="active-research"
-              description="Building a frugal, generalized web agent framework that enables multi-step action output in the form of Python Playwright scripts."
-              hashtags="#ai-agents #playwright #web-automation #deep-learning"
+              title="neo-command/"
+              org="Hack Nation 2026 · Databricks Track"
+              tag="hackathon"
+              description="Healthcare intelligence platform for the Virtue Foundation. Multi-agent system (OpenAI Agents SDK, GPT-5.2) with debate-driven claim verification (Advocate/Skeptic/Judge), knowledge graph of 742 Ghanaian facilities, medical desert detection, and mission deployment scoring. Full-stack with Next.js frontend, D3 network viz, Mapbox maps, and real-time agent tracing via SSE."
+              hashtags="#openai-agents-sdk #nextjs #d3 #networkx #fastapi #lancedB"
             />
             <Card
               year=""
-              title="rag-pipeline/"
+              title="airbio-track/"
+              org="Berlin Hackathon 2025"
+              tag="hackathon"
+              description="AI property management platform for short-term rentals. Vision AI extracts listing details from live camera walks (OpenCV + multi-provider LLMs via OpenRouter), detects maintenance issues from WhatsApp videos with frame-by-frame analysis, and auto-alerts property managers via Gmail. 5-service Docker Compose architecture with React, FastAPI, Flask, and MongoDB."
+              hashtags="#react #fastapi #flask #opencv #openrouter #mongodb #docker"
+            />
+            <Card
+              year=""
+              title="bookmark-organizer/"
               org="Personal"
-              tag="completed"
-              description="Production retrieval-augmented generation with hybrid search, reranking, and evaluation harness."
-              hashtags="#python #pinecone #langchain #retrieval"
+              tag="project"
+              description="Full-stack Twitter bookmark organizer. Generates semantic embeddings (OpenAI text-embedding-3-large, 1024D), clusters via UMAP dimensionality reduction + HDBSCAN, and auto-names topics with GPT-4o-mini. Interactive D3.js force-simulation bubble map for visual exploration. Built with Next.js, FastAPI, and PostgreSQL with pgvector."
+              hashtags="#nextjs #fastapi #d3 #openai #hdbscan #umap #pgvector"
             />
             <Card
               year=""
-              title="eval-dashboard/"
-              org="Startup"
-              tag="in-progress"
-              description="Real-time evaluation framework for tracking LLM output quality across prompt variants and model versions."
-              hashtags="#nextjs #d3 #typescript #evals"
+              title="magus-ai/"
+              org="Hackathon 2026"
+              tag="hackathon"
+              description="Intelligent freight rate quotation agent. Processes unstructured email requests via GPT-4o-mini extraction, resolves port names through 4-tier fuzzy matching (exact/alias/difflib/LLM), normalizes messy Excel rate sheets (ditto marks, merged cells), and calculates volume-weighted pricing with customer-specific SOP rules. Includes HITL review queue, full audit tracing, and REST API."
+              hashtags="#fastapi #streamlit #openai #postgresql #pandas #openpyxl"
+            />
+            <Card
+              year=""
+              title="FOPGame/"
+              org="TUM · Fundamentals of Programming"
+              tag="coursework"
+              description="Quantum Maze Quest — a 2D maze game with A* enemy pathfinding, dynamic ray-traced lighting (Box2D Lights), timed power-ups, and an integrated level editor with reflection-based serialization. Built with LibGDX/Box2D physics, SpriteCache terrain batching, and a 5-level campaign with contextual audio."
+              hashtags="#java #libgdx #box2d #a-star #gradle #github-actions"
             />
           </div>
         </section>
 
         <SpinnerDivider />
 
-        {/* ─── Papers ─── */}
-        <section id="papers" aria-labelledby="papers-heading">
+        {/* ─── Research ─── */}
+        <section id="research" aria-labelledby="research-heading">
           <SectionTitle>
-            <span id="papers-heading">Papers</span>
+            <span id="research-heading">Research</span>
           </SectionTitle>
           <div className="border-l-2 border-divider pl-5">
             <PaperRow
-              title="Efficient Multi-Agent Coordination in LLM Systems"
-              venue="Conference on AI Systems · 2024"
-              href="/papers/multi-agent.pdf"
-              showBorder
-            />
-            <PaperRow
-              title="Retrieval Strategies for Domain-Specific Knowledge Bases"
-              venue="NeurIPS Workshop · 2023"
-              href="/papers/retrieval.pdf"
+              title="Your Research Paper Title"
+              venue="TUMKolleg · 2023"
+              href="/papers/research.pdf"
             />
           </div>
         </section>
@@ -339,13 +373,15 @@ export default function Home() {
           </SectionTitle>
           <div className="border-l-2 border-accent/40 py-2 pl-5">
             <p className="max-w-[640px] text-[0.95em] italic leading-[1.8] opacity-85">
-              &ldquo;Jan demonstrated exceptional ability to bridge theoretical
-              understanding with practical implementation. Their work on
-              multi-agent systems showed both technical depth and creative
-              problem-solving that I rarely see at this level.&rdquo;
+              &ldquo;Jan possesses a unique blend of deep intrinsic learning,
+              the ability to communicate complex ideas with clarity, and a
+              proactive drive that creates tangible results. He doesn&apos;t
+              just complete tasks; he identifies opportunities for impact and
+              builds solutions that elevate everyone around him.&rdquo;
             </p>
             <p className="mt-3 text-[0.85em] text-text-muted">
-              &mdash; Prof. Name, University Department
+              &mdash; Dr. Mark Huasong Meng, Research Fellow, Chair for
+              Software Engineering &amp; AI, TUM
             </p>
           </div>
         </section>
@@ -366,12 +402,12 @@ export default function Home() {
           <span className="hidden sm:inline">
             <span className="font-bold text-accent">?</span> scroll to explore
           </span>
-          <span className="sm:hidden">Jan Jancen</span>
+          <span className="sm:hidden">Jan Sirui Chen</span>
           <span className="hidden text-text-muted sm:inline">
             last updated Feb 2026
           </span>
           <span className="text-right">
-            3 projects &middot; 2 papers &middot;{" "}
+            5 projects &middot; 1 paper &middot;{" "}
             <span className="font-semibold text-accent">open to work</span>
           </span>
         </div>
