@@ -332,7 +332,7 @@ export default function Home() {
             <Card
               year=""
               title={<a href="https://github.com/MohiCodeHub/airbio-track" target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-1 transition-colors duration-200 hover:text-accent">airbio-track/</a>}
-              org={<a href="https://www.linkedin.com/posts/acavaeiro_is-it-far-fetched-to-build-an-ai-agent-that-ugcPost-7421881679385874432-ZrMg?utm_source=social_share_send&utm_medium=member_desktop_web" target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-1 text-text-muted transition-colors duration-200 hover:text-accent">Tech Europe Hackathon 2025</a>}
+              org={<a href="https://www.linkedin.com/posts/acavaeiro_is-it-far-fetched-to-build-an-ai-agent-that-ugcPost-7421881679385874432-ZrMg?utm_source=social_share_send&utm_medium=member_desktop_web" target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-1 text-text-muted transition-colors duration-200 hover:text-accent">Tech Europe Hackathon 2026</a>}
               tag="hackathon"
               achievement="3rd Place overall · Track Winner · Tech Europe Hackathon"
               description="AI property management platform for short-term rentals. Vision AI extracts listing details from live camera walks (OpenCV + multi-provider LLMs via OpenRouter), detects maintenance issues from WhatsApp videos with frame-by-frame analysis, and auto-alerts property managers via Gmail. 5-service Docker Compose architecture with React, FastAPI, Flask, and MongoDB."
